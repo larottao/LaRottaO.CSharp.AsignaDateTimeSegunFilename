@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
 {
     internal class Program
     {
+        private static CultureInfo culture = CultureInfo.InvariantCulture;
+
         private static void Main(string[] args)
         {
             string rootDirectory = "C:\\Multimedia\\Takeout2\\";
 
             string[] filePaths = Directory.GetFiles(rootDirectory, "*", SearchOption.AllDirectories);
-
-            CultureInfo culture = CultureInfo.InvariantCulture;
 
             List<String> posiblesFormatos = new List<String>
             {
@@ -35,6 +39,13 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
 
             foreach (string filePath in filePaths)
             {
+                if (Path.GetExtension(filePath).Equals(".rar", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                Console.WriteLine(filePath + "--------------------------------------------");
+
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
 
                 fileName = fileName.Replace("IMG_", "");
@@ -85,9 +96,7 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
                 {
                     if (DateTime.TryParseExact(fileName, posibleFormato, culture, DateTimeStyles.None, out DateTime result))
                     {
-                        File.SetCreationTime(filePath, result);
-                        File.SetLastWriteTime(filePath, result);
-                        //Console.WriteLine(filePath + " Corregido a: " + result.ToString());
+                        corregirFecha(filePath, result, "filename");
                         parseoExitoso = true;
                         break;
                     }
@@ -95,11 +104,52 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
 
                 if (!parseoExitoso)
                 {
-                    Console.WriteLine("<" + fileName + "> no se pudo parsear.");
+                    obtenerExif(filePath);
                 }
             }
 
             Console.ReadLine();
+        }
+
+        public static void corregirFecha(String filePath, DateTime result, String mecanismoUsado)
+        {
+            File.SetCreationTime(filePath, result);
+            File.SetLastWriteTime(filePath, result);
+            Console.WriteLine(filePath + " Corregido a: " + result.ToString() + " usando " + mecanismoUsado);
+        }
+
+        public static void obtenerExif(String filePath)
+        {
+            String dateTaken = null;
+
+            using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    Image image = Image.FromStream(fs);
+
+                    PropertyItem propItem = image.GetPropertyItem(36867);
+                    dateTaken = Encoding.UTF8.GetString(propItem.Value);
+                    image.Dispose();
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            if (dateTaken == null)
+            {
+                return;
+            }
+
+            dateTaken = dateTaken.Replace("\0", "");
+            dateTaken = dateTaken.Trim();
+
+            if (DateTime.TryParseExact(dateTaken, "yyyy:MM:dd HH:mm:ss", culture, DateTimeStyles.None, out DateTime result))
+            {
+                corregirFecha(filePath, result, "EXIF");
+            }
         }
     }
 }
