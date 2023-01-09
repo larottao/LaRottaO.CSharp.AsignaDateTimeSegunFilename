@@ -15,7 +15,7 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
 
         private static void Main(string[] args)
         {
-            string rootDirectory = "C:\\Multimedia\\Takeout2\\";
+            string rootDirectory = "C:\\Multimedia\\Takeout2\\Gina";
 
             string[] filePaths = Directory.GetFiles(rootDirectory, "*", SearchOption.AllDirectories);
 
@@ -45,6 +45,13 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
                 }
 
                 Console.WriteLine(filePath + "--------------------------------------------");
+
+                Boolean exitoExif = corregirDatosUsandoEXIF(filePath);
+
+                if (exitoExif)
+                {
+                    continue;
+                }
 
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
 
@@ -90,36 +97,27 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
                     fileName = fileName.Substring(1);
                 }
 
-                Boolean parseoExitoso = false;
-
                 foreach (String posibleFormato in posiblesFormatos)
                 {
                     if (DateTime.TryParseExact(fileName, posibleFormato, culture, DateTimeStyles.None, out DateTime result))
                     {
                         corregirFecha(filePath, result, "filename");
-                        parseoExitoso = true;
                         break;
                     }
                 }
-
-                if (!parseoExitoso)
-                {
-                    obtenerExif(filePath);
-                }
             }
 
+            Console.WriteLine("Presione una tecla para salir...");
             Console.ReadLine();
         }
 
-        public static void corregirFecha(String filePath, DateTime result, String mecanismoUsado)
+        public static Boolean corregirDatosUsandoEXIF(String filePath)
         {
-            File.SetCreationTime(filePath, result);
-            File.SetLastWriteTime(filePath, result);
-            Console.WriteLine(filePath + " Corregido a: " + result.ToString() + " usando " + mecanismoUsado);
-        }
+            if (filePath.Contains("1552031_610852902302441_524952478_o"))
+            {
+                ;
+            }
 
-        public static void obtenerExif(String filePath)
-        {
             String dateTaken = null;
 
             using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
@@ -132,15 +130,17 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
                     dateTaken = Encoding.UTF8.GetString(propItem.Value);
                     image.Dispose();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return;
+                    fallido(filePath, ex.Message);
+                    return false;
                 }
             }
 
             if (dateTaken == null)
             {
-                return;
+                fallido(filePath, "EXIF no encontrado.");
+                return false;
             }
 
             dateTaken = dateTaken.Replace("\0", "");
@@ -149,7 +149,34 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
             if (DateTime.TryParseExact(dateTaken, "yyyy:MM:dd HH:mm:ss", culture, DateTimeStyles.None, out DateTime result))
             {
                 corregirFecha(filePath, result, "EXIF");
+                return true;
             }
+            else
+            {
+                fallido(filePath, "Se encontro EXIF, pero no se pudo hacer parsing.");
+                return false;
+            }
+        }
+
+        public static void fallido(String filePath, String motivoFallo)
+        {
+            Console.WriteLine(filePath + " no se pudo corregir. " + motivoFallo);
+        }
+
+        public static void corregirFecha(String filePath, DateTime result, String mecanismoUsado)
+        {
+            File.SetCreationTime(filePath, result);
+            File.SetLastWriteTime(filePath, result);
+            Console.WriteLine(filePath + " Corregido a: " + result.ToString() + " usando " + mecanismoUsado);
+
+            String carpeta = Path.GetDirectoryName(filePath) + @"\" + result.ToString("yyyy-MM-dd");
+
+            if (!Directory.Exists(carpeta))
+            {
+                Directory.CreateDirectory(carpeta);
+            }
+
+            File.Move(filePath, carpeta + @"\" + Path.GetFileName(filePath));
         }
     }
 }
