@@ -12,3 +12,14 @@ C:\Repositorios\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.Asig
 C:\Repositorios\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.exe
 C:\Repositorios\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.pdb
 C:\Repositorios\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\ExifLib.dll
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.csproj.AssemblyReference.cache
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.csproj.CoreCompileInputs.cache
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.exe
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.pdb
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.exe.config
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.exe
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\LaRottaO.CSharp.AsignaDateTimeSegunFilename.pdb
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\ExifLib.dll
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\System.Drawing.Common.dll
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\bin\Debug\System.Drawing.Common.xml
+C:\Repositorios\LA_ROTTA\C#\LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename\obj\Debug\LaRottaO.D5D196B7.Up2Date

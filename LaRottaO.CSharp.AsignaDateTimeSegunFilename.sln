@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaRottaO.CSharp.AsignaDateTimeSegunFilename", "LaRottaO.CSharp.AsignaDateTimeSegunFilename\LaRottaO.CSharp.AsignaDateTimeSegunFilename.csproj", "{B8BBD8F3-5755-470C-9E27-77477664CD1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaRottaO.CSharp.StringUtilities", "..\LaRottaO.CSharp.Utils.Strings\LaRottaO.CSharp.StringUtilities\LaRottaO.CSharp.StringUtilities.csproj", "{7F6F4FA4-C977-44D3-9CCC-BFD4A2A07651}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{B8BBD8F3-5755-470C-9E27-77477664CD1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8BBD8F3-5755-470C-9E27-77477664CD1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8BBD8F3-5755-470C-9E27-77477664CD1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F6F4FA4-C977-44D3-9CCC-BFD4A2A07651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F6F4FA4-C977-44D3-9CCC-BFD4A2A07651}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F6F4FA4-C977-44D3-9CCC-BFD4A2A07651}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F6F4FA4-C977-44D3-9CCC-BFD4A2A07651}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
-using System.Net.Http.Headers;
 using System.Text;
 
 namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
@@ -13,13 +12,15 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
     {
         private static CultureInfo culture = CultureInfo.InvariantCulture;
 
+        static bool move = false;
+        static bool renameWithDate = true;
         private static void Main(string[] args)
         {
-            string rootDirectory = "C:\\Multimedia\\Takeout2\\Gina";
-
+            string rootDirectory = "C:\\Users\\Pantufla\\Desktop\\EXPORT PHOTOS\\Takeout\\Google Photos\\Photos from 2024";
+         
             string[] filePaths = Directory.GetFiles(rootDirectory, "*", SearchOption.AllDirectories);
 
-            List<String> posiblesFormatos = new List<String>
+            List<string> posiblesFormatos = new List<string>
             {
                 "ddMMyyyy_hhmmss",
                 "yyyy-MM-dd h.mm.ss tt",
@@ -46,7 +47,7 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
 
                 Console.WriteLine(filePath + "--------------------------------------------");
 
-                Boolean exitoExif = corregirDatosUsandoEXIF(filePath);
+                bool exitoExif = corregirDatosUsandoEXIF(filePath);
 
                 if (exitoExif)
                 {
@@ -55,25 +56,26 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
 
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
 
-                fileName = fileName.Replace("IMG_", "");
-                fileName = fileName.Replace("IMG-", "");
-                fileName = fileName.Replace(".IMG_", "");
-                fileName = fileName.Replace("XRecorder_", "");
-                fileName = fileName.Replace("WhatsApp Video ", "");
-                fileName = fileName.Replace("WhatsApp Image ", "");
-                fileName = fileName.Replace(" at ", " ");
-                fileName = fileName.Replace(".VID_", "");
-                fileName = fileName.Replace("1-edited", "");
-                fileName = fileName.Replace("(1)", "");
-                fileName = fileName.Replace("(2)", "");
-                fileName = fileName.Replace("VID_", "");
-                fileName = fileName.Replace("VID-", "");
-                fileName = fileName.Replace("PM1", "");
-                fileName = fileName.Replace("AM1", "");
-                fileName = fileName.Replace("Captura de pantalla ", "");
-                fileName = fileName.Replace("Screenshot_", "");
-                fileName = fileName.Replace("_com.whatsapp", "");
-                fileName = fileName.Replace("_WhatsApp", "");
+                // Clean the filename
+                fileName = fileName.Replace("IMG_", "")
+                                  .Replace("IMG-", "")
+                                  .Replace(".IMG_", "")
+                                  .Replace("XRecorder_", "")
+                                  .Replace("WhatsApp Video ", "")
+                                  .Replace("WhatsApp Image ", "")
+                                  .Replace(" at ", " ")
+                                  .Replace(".VID_", "")
+                                  .Replace("1-edited", "")
+                                  .Replace("(1)", "")
+                                  .Replace("(2)", "")
+                                  .Replace("VID_", "")
+                                  .Replace("VID-", "")
+                                  .Replace("PM1", "")
+                                  .Replace("AM1", "")
+                                  .Replace("Captura de pantalla ", "")
+                                  .Replace("Screenshot_", "")
+                                  .Replace("_com.whatsapp", "")
+                                  .Replace("_WhatsApp", "");
 
                 fileName = fileName.Trim();
 
@@ -97,11 +99,18 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
                     fileName = fileName.Substring(1);
                 }
 
-                foreach (String posibleFormato in posiblesFormatos)
+                foreach (string posibleFormato in posiblesFormatos)
                 {
                     if (DateTime.TryParseExact(fileName, posibleFormato, culture, DateTimeStyles.None, out DateTime result))
                     {
-                        corregirFecha(filePath, result, "filename");
+                        if (move)
+                        {
+                            MoveFileToDateFolder(filePath, result);
+                        }
+                        else if (renameWithDate)
+                        {
+                            RenameFileWithDate(filePath, result);
+                        }
                         break;
                     }
                 }
@@ -111,21 +120,15 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
             Console.ReadLine();
         }
 
-        public static Boolean corregirDatosUsandoEXIF(String filePath)
+        public static bool corregirDatosUsandoEXIF(string filePath)
         {
-            if (filePath.Contains("1552031_610852902302441_524952478_o"))
-            {
-                ;
-            }
-
-            String dateTaken = null;
+            string dateTaken = null;
 
             using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
                 try
                 {
                     Image image = Image.FromStream(fs);
-
                     PropertyItem propItem = image.GetPropertyItem(36867);
                     dateTaken = Encoding.UTF8.GetString(propItem.Value);
                     image.Dispose();
@@ -143,12 +146,18 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
                 return false;
             }
 
-            dateTaken = dateTaken.Replace("\0", "");
-            dateTaken = dateTaken.Trim();
+            dateTaken = dateTaken.Replace("\0", "").Trim();
 
             if (DateTime.TryParseExact(dateTaken, "yyyy:MM:dd HH:mm:ss", culture, DateTimeStyles.None, out DateTime result))
             {
-                corregirFecha(filePath, result, "EXIF");
+                if (move)
+                {
+                    MoveFileToDateFolder(filePath, result);
+                }
+                else if (renameWithDate)
+                {
+                    RenameFileWithDate(filePath, result);
+                }
                 return true;
             }
             else
@@ -158,18 +167,14 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
             }
         }
 
-        public static void fallido(String filePath, String motivoFallo)
+        public static void fallido(string filePath, string motivoFallo)
         {
             Console.WriteLine(filePath + " no se pudo corregir. " + motivoFallo);
         }
 
-        public static void corregirFecha(String filePath, DateTime result, String mecanismoUsado)
+        public static void MoveFileToDateFolder(string filePath, DateTime result)
         {
-            File.SetCreationTime(filePath, result);
-            File.SetLastWriteTime(filePath, result);
-            Console.WriteLine(filePath + " Corregido a: " + result.ToString() + " usando " + mecanismoUsado);
-
-            String carpeta = Path.GetDirectoryName(filePath) + @"\" + result.ToString("yyyy-MM-dd");
+            string carpeta = Path.GetDirectoryName(filePath) + @"\" + result.ToString("yyyy-MM-dd");
 
             if (!Directory.Exists(carpeta))
             {
@@ -177,6 +182,17 @@ namespace LaRottaO.CSharp.AsignaDateTimeSegunFilename
             }
 
             File.Move(filePath, carpeta + @"\" + Path.GetFileName(filePath));
+            Console.WriteLine(filePath + " Movido a: " + carpeta);
+        }
+
+        public static void RenameFileWithDate(string filePath, DateTime result)
+        {
+            string directory = Path.GetDirectoryName(filePath);
+            string newFileName = result.ToString("yyyy-MM-dd") + " " + Path.GetFileName(filePath);
+            string newFilePath = Path.Combine(directory, newFileName);
+
+            File.Move(filePath, newFilePath);
+            Console.WriteLine(filePath + " Renombrado a: " + newFileName);
         }
     }
 }

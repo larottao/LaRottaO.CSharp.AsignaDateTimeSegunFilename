@@ -57,11 +57,5 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\LaRottaO.CSharp.Utils.Strings\LaRottaO.CSharp.StringUtilities\LaRottaO.CSharp.StringUtilities.csproj">
-      <Project>{7F6F4FA4-C977-44D3-9CCC-BFD4A2A07651}</Project>
-      <Name>LaRottaO.CSharp.StringUtilities</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
